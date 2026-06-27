@@ -10,7 +10,7 @@ use App\Models\User;
 
 class AuthController extends Controller
 {
-    public function login(Request $request)
+    /*public function login(Request $request)
     {
         $credentials = $request->only('email', 'password');
 
@@ -20,6 +20,24 @@ class AuthController extends Controller
         }
 
         return response()->json(['error' => 'Unauthorized'], 401);
+    }*/
+
+    public function login(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
+
+        $user = User::where('email', $request->email)->first();
+
+        if (!$user || !Hash::check($request->password, $user->password)) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+
+        $token = $user->createToken('API Token')->plainTextToken;
+
+        return response()->json(['token' => $token]);
     }
 
     public function logout(Request $request)
