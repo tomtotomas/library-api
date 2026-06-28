@@ -16,6 +16,9 @@ Route::post('/login', [App\Http\Controllers\Api\AuthController::class, 'login'])
 // GENRE PUBLIC ROUTES
 Route::get('/genres', [App\Http\Controllers\Api\GenresController::class, 'index']);
 
+// BOOK PUBLIC ROUTES
+Route::get('/books', [App\Http\Controllers\Api\BooksController::class, 'index']);
+
 Route::middleware('auth:sanctum')->group(function () {
     
     // PROTECTED ROUTES
@@ -32,6 +35,12 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/genre/{id}', [App\Http\Controllers\Api\GenresController::class, 'show']);
         Route::put('/genre/{id}', [App\Http\Controllers\Api\GenresController::class, 'update']);
         Route::delete('/genre/{id}', [App\Http\Controllers\Api\GenresController::class, 'destroy']);
+
+        // BOOK ADMIN ROUTES / CRUD
+        Route::post('/book', [App\Http\Controllers\Api\BooksController::class, 'store']);
+        Route::get('/book/{id}', [App\Http\Controllers\Api\BooksController::class, 'show']);
+        Route::put('/book/{id}', [App\Http\Controllers\Api\BooksController::class, 'update']);
+        Route::delete('/book/{id}', [App\Http\Controllers\Api\BooksController::class, 'destroy']);
 
 
     });
