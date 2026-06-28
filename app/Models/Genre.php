@@ -4,10 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
-class Genres extends Model
+class Genre extends Model
 {
-    /** @use HasFactory<UserFactory> */
     use HasFactory;
 
     public $timestamps = false;
@@ -17,5 +17,13 @@ class Genres extends Model
         'description'
     ];
 
+    protected $hidden = [
+        'pivot'
+    ];
 
+    public function books(): BelongsToMany
+    {
+        return $this->belongsToMany(Book::class);
+    }
+    
 }

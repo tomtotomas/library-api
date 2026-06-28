@@ -2,7 +2,8 @@
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\UserController;
-use App\Http\Controllers\Api\GenresController;
+use App\Http\Controllers\Api\GenreController;
+use App\Http\Controllers\Api\BookController;
 use App\Http\Middleware\CheckRole;
 
 use Illuminate\Http\Request;
@@ -10,38 +11,37 @@ use Illuminate\Support\Facades\Route;
 
 
 // PUBLIC ROUTES
-Route::post('/register', [App\Http\Controllers\Api\UserController::class, 'register']);
-Route::post('/login', [App\Http\Controllers\Api\AuthController::class, 'login']);
+Route::post('/register', [UserController::class, 'register']);
+Route::post('/login', [AuthController::class, 'login']);
 
 // GENRE PUBLIC ROUTES
-Route::get('/genres', [App\Http\Controllers\Api\GenresController::class, 'index']);
+Route::get('/genres', [GenreController::class, 'index']);
+Route::get('/genres/{genre}', [GenreController::class, 'show']);
 
 // BOOK PUBLIC ROUTES
-Route::get('/books', [App\Http\Controllers\Api\BooksController::class, 'index']);
+Route::get('/books', [BookController::class, 'index']);
+Route::get('/books/{book}', [BookController::class, 'show']);
 
 Route::middleware('auth:sanctum')->group(function () {
     
     // PROTECTED ROUTES
-    Route::post('/logout', [App\Http\Controllers\Api\AuthController::class, 'logout']);
-    Route::get('/me', [App\Http\Controllers\Api\AuthController::class, 'me']);
+    Route::post('/logout', [AuthController::class, 'logout']);
+    Route::get('/me', [AuthController::class, 'me']);
 
     // ADMIN ROUTES
     Route::middleware('role:admin')->group(function () {
 
-        Route::get('/users', [App\Http\Controllers\Api\UserController::class, 'index']);
+        Route::get('/users', [UserController::class, 'index']);
 
-        // GENRE ADMIN ROUTES / CRUD
-        Route::post('/genre', [App\Http\Controllers\Api\GenresController::class, 'store']);
-        Route::get('/genre/{id}', [App\Http\Controllers\Api\GenresController::class, 'show']);
-        Route::put('/genre/{id}', [App\Http\Controllers\Api\GenresController::class, 'update']);
-        Route::delete('/genre/{id}', [App\Http\Controllers\Api\GenresController::class, 'destroy']);
+        // GENRE ADMIN ROUTES / CRUD 
+        Route::match(['put', 'patch'], '/genres/{genre}', [GenreController::class, 'update']);
+        Route::post('/genres', [GenreController::class, 'store']);
+        Route::delete('/genres/{genre}', [GenreController::class, 'destroy']);
 
-        // BOOK ADMIN ROUTES / CRUD
-        Route::post('/book', [App\Http\Controllers\Api\BooksController::class, 'store']);
-        Route::get('/book/{id}', [App\Http\Controllers\Api\BooksController::class, 'show']);
-        Route::put('/book/{id}', [App\Http\Controllers\Api\BooksController::class, 'update']);
-        Route::delete('/book/{id}', [App\Http\Controllers\Api\BooksController::class, 'destroy']);
-
+        // BOOK ADMIN ROUTES / CRUD 
+        Route::match(['put', 'patch'], '/books/{book}', [BookController::class, 'update']);
+        Route::post('/books', [BookController::class, 'store']);
+        Route::delete('/books/{book}', [BookController::class, 'destroy']);
 
     });
 

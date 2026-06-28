@@ -10,11 +10,11 @@ class CheckRole
     public function handle(Request $request, Closure $next, ...$roles)
     {
         if (!$request->user()) {
-            return response()->json(['error' => 'Unauthorized'], 401);
+            return response()->json(['message' => 'Unauthorized'], 401);
         }
 
         if (!in_array($request->user()->role, $roles)) {
-            return response()->json(['error' => 'Unauthorized. Role required: ' . implode(', ', $roles)], 403);
+            return response()->json(['message' => 'Access Denied: ' . implode(', ', $roles)], 403);
         }
 
         return $next($request);

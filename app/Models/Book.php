@@ -4,11 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
-class Books extends Model
+class Book extends Model
 {
 
-    /** @use HasFactory<UserFactory> */
     use HasFactory;
 
     public $timestamps = false;
@@ -18,5 +18,10 @@ class Books extends Model
         'description',
         'image'
     ];
+
+    public function genres(): BelongsToMany
+    {
+        return $this->belongsToMany(Genre::class);
+    }
 
 }
